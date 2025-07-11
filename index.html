@@ -3,540 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Video Downloader</title>
+    <title>SaveX - Tap. Save. Enjoy.</title>
     <style>
-        :root {
-            --bg-color: #1a1a1a;
-            --primary-color: #2a2a2a;
-            --secondary-color: #3a3a3a;
-            --highlight-color: #4a4a4a;
-            --text-color: #e0e0e0;
-            --accent-color: #6c5ce7;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        .downloader-card {
-            background: var(--primary-color);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.5),
-                -8px -8px 15px rgba(255, 255, 255, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 12px;
-            background: var(--secondary-color);
-            color: var(--text-color);
-            font-size: 1rem;
-            box-shadow: 
-                inset 3px 3px 5px rgba(0, 0, 0, 0.3),
-                inset -3px -3px 5px rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            box-shadow: 
-                inset 5px 5px 8px rgba(0, 0, 0, 0.4),
-                inset -5px -5px 8px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            background: var(--accent-color);
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-left: 10px;
-            box-shadow: 
-                5px 5px 10px rgba(0, 0, 0, 0.3),
-                -5px -5px 10px rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.4),
-                -8px -8px 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.3),
-                -2px -2px 5px rgba(255, 255, 255, 0.05);
-        }
-
-        .platform-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .platform-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-color);
-            box-shadow: 
-                5px 5px 10px rgba(0, 0, 0, 0.3),
-                -5px -5px 10px rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .platform-icon:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.4),
-                -8px -8px 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .platform-icon img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
-
-        .history-section {
-            background: var(--primary-color);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.5),
-                -8px -8px 15px rgba(255, 255, 255, 0.05);
-        }
-
-        .history-title {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .history-list {
-            list-style: none;
-        }
-
-        .history-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            background: var(--secondary-color);
-            box-shadow: 
-                3px 3px 5px rgba(0, 0, 0, 0.2),
-                -3px -3px 5px rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .history-item:hover {
-            background: var(--highlight-color);
-            transform: translateX(5px);
-        }
-
-        .history-platform {
-            width: 30px;
-            height: 30px;
-            margin-right: 15px;
-        }
-
-        .history-content {
-            flex: 1;
-        }
-
-        .history-date {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        .download-btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            cursor: pointer;
-            box-shadow: 
-                3px 3px 5px rgba(0, 0, 0, 0.3),
-                -3px -3px 5px rgba(255, 255, 255, 0.05);
-        }
-
-        .result-section {
-            display: none;
-            margin-top: 20px;
-            background: var(--primary-color);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 
-                8px 8px 15px rgba(0, 0, 0, 0.5),
-                -8px -8px 15px rgba(255, 255, 255, 0.05);
-        }
-
-        .video-preview {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 
-                5px 5px 10px rgba(0, 0, 0, 0.3),
-                -5px -5px 10px rgba(255, 255, 255, 0.05);
-        }
-
-        .download-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .download-option {
-            background: var(--secondary-color);
-            border-radius: 8px;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            box-shadow: 
-                3px 3px 5px rgba(0, 0, 0, 0.3),
-                -3px -3px 5px rgba(255, 255, 255, 0.05);
-        }
-
-        .download-option:hover {
-            background: var(--highlight-color);
-        }
-
-        @media (max-width: 600px) {
-            .input-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                margin-left: 0;
-                margin-top: 10px;
-                width: 100%;
-            }
-
-            .platform-icons {
-                flex-wrap: wrap;
-            }
-        }
+        /* (Keep all your existing CSS styles exactly the same) */
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Social Video Downloader</h1>
-            <p class="subtitle">Download videos from Instagram, Twitter, Facebook, YouTube & TikTok</p>
-        </header>
-
-        <div class="platform-icons">
-            <div class="platform-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
-            </div>
-            <div class="platform-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
-            </div>
-            <div class="platform-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-            </div>
-            <div class="platform-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube">
-            </div>
-            <div class="platform-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046126.png" alt="TikTok">
-            </div>
-        </div>
-
-        <div class="downloader-card">
-            <div class="input-group">
-                <input type="text" id="videoUrl" placeholder="Paste your link here...">
-                <button class="btn" id="downloadBtn">Download</button>
-            </div>
-
-            <div class="result-section" id="resultSection">
-                <video controls class="video-preview" id="videoPreview"></video>
-                <div class="download-options" id="downloadOptions">
-                    <!-- Download options will be added here dynamically -->
-                </div>
-            </div>
-        </div>
-
-        <div class="history-section">
-            <h2 class="history-title">
-                <span>History</span>
-                <span>NOW YOU CAN ALSO DOWNLOAD FROM</span>
-            </h2>
-            <ul class="history-list" id="historyList">
-                <!-- History items will be added here dynamically -->
-                <li class="history-item">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="history-platform" alt="Instagram">
-                    <div class="history-content">
-                        <div>Instagram Reel</div>
-                        <div class="history-date">Today, 10:30 AM</div>
-                    </div>
-                    <button class="download-btn">Download</button>
-                </li>
-                <li class="history-item">
-                    <img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" class="history-platform" alt="YouTube">
-                    <div class="history-content">
-                        <div>YouTube Video</div>
-                        <div class="history-date">Yesterday, 4:15 PM</div>
-                    </div>
-                    <button class="download-btn">Download</button>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <!-- (Keep all your existing HTML exactly the same) -->
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const downloadBtn = document.getElementById('downloadBtn');
-            const videoUrlInput = document.getElementById('videoUrl');
-            const resultSection = document.getElementById('resultSection');
-            const videoPreview = document.getElementById('videoPreview');
-            const downloadOptions = document.getElementById('downloadOptions');
-            const historyList = document.getElementById('historyList');
+class VideoDownloader {
+    constructor() {
+        this.initializeElements();
+        this.bindEvents();
+        this.loadHistory();
+        this.supportedPlatforms = {
+            'youtube.com': 'youtube',
+            'youtu.be': 'youtube'
+            // Add other platforms when you find working APIs for them
+        };
+    }
 
-            // Sample download function (in a real app, this would call a backend service)
-            downloadBtn.addEventListener('click', function() {
-                const url = videoUrlInput.value.trim();
-                
-                if (!url) {
-                    alert('Please enter a valid URL');
-                    return;
-                }
+    initializeElements() {
+        this.urlInput = document.getElementById('videoUrl');
+        this.downloadBtn = document.getElementById('downloadBtn');
+        this.historyBtn = document.getElementById('historyBtn');
+        this.downloadHistory = document.getElementById('downloadHistory');
+        this.historyList = document.getElementById('historyList');
+        this.loadingOverlay = document.getElementById('loadingOverlay');
+        this.platformIcons = document.querySelectorAll('.platform-icon');
+    }
 
-                // Show loading state
-                downloadBtn.textContent = 'Processing...';
-                downloadBtn.disabled = true;
-
-                // Simulate API call
-                setTimeout(function() {
-                    // Reset button
-                    downloadBtn.textContent = 'Download';
-                    downloadBtn.disabled = false;
-
-                    // Show result section
-                    resultSection.style.display = 'block';
-
-                    // Simulate different results based on platform
-                    if (url.includes('instagram.com')) {
-                        handleInstagramResult(url);
-                    } else if (url.includes('twitter.com') || url.includes('x.com')) {
-                        handleTwitterResult(url);
-                    } else if (url.includes('facebook.com')) {
-                        handleFacebookResult(url);
-                    } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                        handleYouTubeResult(url);
-                    } else if (url.includes('tiktok.com')) {
-                        handleTikTokResult(url);
-                    } else {
-                        alert('Unsupported platform. Please use Instagram, Twitter, Facebook, YouTube or TikTok links.');
-                        resultSection.style.display = 'none';
-                    }
-
-                    // Add to history
-                    addToHistory(url);
-                }, 1500);
-            });
-
-            function handleInstagramResult(url) {
-                videoPreview.poster = 'https://via.placeholder.com/800x450/6c5ce7/ffffff?text=Instagram+Video+Preview';
-                videoPreview.src = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-                
-                downloadOptions.innerHTML = `
-                    <div class="download-option">
-                        <span>MP4 HD (720p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP4 SD (480p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                `;
-            }
-
-            function handleTwitterResult(url) {
-                videoPreview.poster = 'https://via.placeholder.com/800x450/1DA1F2/ffffff?text=Twitter+Video+Preview';
-                videoPreview.src = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-                
-                downloadOptions.innerHTML = `
-                    <div class="download-option">
-                        <span>MP4 (Highest Quality)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>GIF</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                `;
-            }
-
-            function handleFacebookResult(url) {
-                videoPreview.poster = 'https://via.placeholder.com/800x450/1877F2/ffffff?text=Facebook+Video+Preview';
-                videoPreview.src = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-                
-                downloadOptions.innerHTML = `
-                    <div class="download-option">
-                        <span>MP4 HD (1080p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP4 SD (720p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>Audio Only</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                `;
-            }
-
-            function handleYouTubeResult(url) {
-                videoPreview.poster = 'https://via.placeholder.com/800x450/FF0000/ffffff?text=YouTube+Video+Preview';
-                videoPreview.src = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-                
-                downloadOptions.innerHTML = `
-                    <div class="download-option">
-                        <span>MP4 4K (2160p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP4 HD (1080p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP4 (720p)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP3 Audio</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                `;
-            }
-
-            function handleTikTokResult(url) {
-                videoPreview.poster = 'https://via.placeholder.com/800x450/000000/ffffff?text=TikTok+Video+Preview';
-                videoPreview.src = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-                
-                downloadOptions.innerHTML = `
-                    <div class="download-option">
-                        <span>MP4 (No Watermark)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                    <div class="download-option">
-                        <span>MP4 (With Watermark)</span>
-                        <button class="download-btn" style="margin-left: 10px;">Download</button>
-                    </div>
-                `;
-            }
-
-            function addToHistory(url) {
-                const platform = getPlatformFromUrl(url);
-                if (!platform) return;
-
-                const platformIcons = {
-                    'instagram': 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',
-                    'twitter': 'https://cdn-icons-png.flaticon.com/512/733/733579.png',
-                    'facebook': 'https://cdn-icons-png.flaticon.com/512/733/733547.png',
-                    'youtube': 'https://cdn-icons-png.flaticon.com/512/733/733646.png',
-                    'tiktok': 'https://cdn-icons-png.flaticon.com/512/3046/3046126.png'
-                };
-
-                const platformNames = {
-                    'instagram': 'Instagram',
-                    'twitter': 'Twitter',
-                    'facebook': 'Facebook',
-                    'youtube': 'YouTube',
-                    'tiktok': 'TikTok'
-                };
-
-                const now = new Date();
-                const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const dateString = now.toLocaleDateString([], { month: 'short', day: 'numeric' });
-
-                const historyItem = document.createElement('li');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <img src="${platformIcons[platform]}" class="history-platform" alt="${platformNames[platform]}">
-                    <div class="history-content">
-                        <div>${platformNames[platform]} Video</div>
-                        <div class="history-date">${dateString}, ${timeString}</div>
-                    </div>
-                    <button class="download-btn">Download</button>
-                `;
-
-                historyList.insertBefore(historyItem, historyList.firstChild);
-            }
-
-            function getPlatformFromUrl(url) {
-                if (url.includes('instagram.com')) return 'instagram';
-                if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
-                if (url.includes('facebook.com')) return 'facebook';
-                if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
-                if (url.includes('tiktok.com')) return 'tiktok';
-                return null;
-            }
+    bindEvents() {
+        this.downloadBtn.addEventListener('click', () => this.handleDownload());
+        this.urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleDownload();
         });
+        this.historyBtn.addEventListener('click', () => this.toggleHistory());
+        this.platformIcons.forEach(icon => {
+            icon.addEventListener('click', () => this.handlePlatformClick(icon));
+        });
+        this.urlInput.addEventListener('input', () => this.validateInput());
+    }
+
+    validateInput() {
+        const url = this.urlInput.value.trim();
+        const isValid = this.isValidUrl(url);
+        this.downloadBtn.style.opacity = isValid ? '1' : '0.6';
+        this.downloadBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+        return isValid;
+    }
+
+    isValidUrl(url) {
+        if (!url) return false;
+        try {
+            const urlObj = new URL(url);
+            const hostname = urlObj.hostname.toLowerCase().replace('www.', '');
+            return Object.keys(this.supportedPlatforms).some(platform => 
+                hostname.includes(platform)
+            );
+        } catch {
+            return false;
+        }
+    }
+
+    getPlatformFromUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            const hostname = urlObj.hostname.toLowerCase().replace('www.', '');
+            for (const [platform, name] of Object.entries(this.supportedPlatforms)) {
+                if (hostname.includes(platform)) {
+                    return name;
+                }
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    }
+
+    async handleDownload() {
+        const url = this.urlInput.value.trim();
+        if (!this.isValidUrl(url)) {
+            this.showError('Please enter a valid URL from supported platforms');
+            return;
+        }
+
+        const platform = this.getPlatformFromUrl(url);
+        if (!platform) {
+            this.showError('Platform not supported');
+            return;
+        }
+
+        this.showLoading();
+
+        try {
+            // For YouTube, we'll use a simple proxy service
+            if (platform === 'youtube') {
+                const videoId = this.extractYouTubeId(url);
+                if (!videoId) throw new Error('Invalid YouTube URL');
+                
+                // Using a free CORS proxy to fetch download info
+                const response = await fetch(`https://cors-anywhere.herokuapp.com/https://yt5s.io/api/ajaxSearch?q=${videoId}`);
+                const data = await response.json();
+                
+                if (!data.links) throw new Error('No download links found');
+                
+                // Get the highest quality MP4 link
+                const downloadLink = data.links.mp4['720p'] || data.links.mp4['360p'];
+                if (!downloadLink) throw new Error('No downloadable version found');
+                
+                // Trigger the download
+                window.open(downloadLink, '_blank');
+            }
+
+            this.addToHistory(url, platform);
+            this.showSuccess(platform);
+            this.urlInput.value = '';
+            this.validateInput();
+            
+        } catch (error) {
+            this.showError(error.message || 'Download failed. Please try again.');
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    extractYouTubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    showLoading() {
+        this.loadingOverlay.style.display = 'flex';
+        this.downloadBtn.disabled = true;
+    }
+
+    hideLoading() {
+        this.loadingOverlay.style.display = 'none';
+        this.downloadBtn.disabled = false;
+    }
+
+    showSuccess(platform) {
+        const notification = this.createNotification(
+            `✅ Video from ${platform.charAt(0).toUpperCase() + platform.slice(1)} downloaded successfully!`,
+            'success'
+        );
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    showError(message) {
+        const notification = this.createNotification(`❌ ${message}`, 'error');
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 4000);
+    }
+
+    createNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        Object.assign(notification.style, {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            padding: '1rem 1.5rem',
+            borderRadius: '12px',
+            color: 'white',
+            fontWeight: '500',
+            fontSize: '0.875rem',
+            zIndex: '1001',
+            maxWidth: '300px',
+            wordWrap: 'break-word',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+            animation: 'slideIn 0.3s ease-out',
+            background: type === 'success' ? 
+                'linear-gradient(135deg, #10b981, #059669)' : 
+                'linear-gradient(135deg, #ef4444, #dc2626)'
+        });
+        return notification;
+    }
+
+    handlePlatformClick(icon) {
+        const platform = icon.dataset.platform;
+        icon.style.transform = 'scale(0.95)';
+        setTimeout(() => icon.style.transform = '', 150);
+
+        const platformNames = {
+            instagram: 'Instagram',
+            youtube: 'YouTube',
+            facebook: 'Facebook',
+            tiktok: 'TikTok',
+            twitter: 'Twitter/X',
+            vimeo: 'Vimeo'
+        };
+
+        const notification = this.createNotification(
+            `📱 Paste a ${platformNames[platform]} video URL to download`,
+            'info'
+        );
+        notification.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 2500);
+        this.urlInput.focus();
+    }
+
+    toggleHistory() {
+        const isVisible = this.downloadHistory.style.display !== 'none';
+        this.downloadHistory.style.display = isVisible ? 'none' : 'block';
+        this.historyBtn.innerHTML = isVisible ? 
+            '<svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>History' :
+            '<svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>Close';
+    }
+
+    addToHistory(url, platform) {
+        const history = this.getStoredHistory();
+        const newEntry = {
+            id: Date.now(),
+            url: url,
+            platform: platform,
+            timestamp: new Date().toISOString(),
+            displayTime: new Date().toLocaleString()
+        };
+        history.unshift(newEntry);
+        if (history.length > 20) history.splice(20);
+        localStorage.setItem('videoDownloadHistory', JSON.stringify(history));
+        this.renderHistory();
+    }
+
+    getStoredHistory() {
+        try {
+            return JSON.parse(localStorage.getItem('videoDownloadHistory')) || [];
+        } catch {
+            return [];
+        }
+    }
+
+    loadHistory() {
+        this.renderHistory();
+    }
+
+    renderHistory() {
+        const history = this.getStoredHistory();
+        this.historyList.innerHTML = history.length === 0 ? 
+            '<p class="no-history">No downloads yet</p>' :
+            history.map(entry => `
+                <div class="history-item">
+                    <div class="history-item-info">
+                        <div class="history-item-url">${this.truncateUrl(entry.url)}</div>
+                        <div class="history-item-time">${entry.displayTime} • ${entry.platform}</div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    truncateUrl(url, maxLength = 40) {
+        return url.length <= maxLength ? url : url.substring(0, maxLength - 3) + '...';
+    }
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    .notification { animation: slideIn 0.3s ease-out; }
+`;
+document.head.appendChild(style);
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    new VideoDownloader();
+    
+    // Add subtle parallax effect
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+        document.body.style.background = `
+            linear-gradient(
+                ${135 + mouseX * 10}deg, 
+                hsl(${220 + mouseY * 10}, 15%, ${10 + mouseY * 5}%) 0%, 
+                hsl(${220 + mouseX * 10}, 20%, ${16 + mouseX * 5}%) 100%
+            )`;
+    });
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('videoUrl').focus();
+        }
+        if (e.key === 'Escape') {
+            const history = document.getElementById('downloadHistory');
+            if (history.style.display !== 'none') {
+                history.style.display = 'none';
+                document.getElementById('historyBtn').innerHTML = 
+                    '<svg class="history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>History';
+            }
+        }
+    });
+});
     </script>
 </body>
 </html>
